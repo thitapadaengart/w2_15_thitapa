@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      // แก้ไข Syntax error จาก .fromSeed เป็น ColorScheme.fromSeed
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -45,33 +46,59 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightGreenAccent[100],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.deepPurple,
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            const Text('คำนวณลิตรเป็นแกลลอน (US)'),
-            Text("แกลลอน (US) = $area"),
-            TextField(
-              controller: _literController,
-              decoration: InputDecoration(
-                labelText: "ลิตร",
-                icon: Icon(Icons.hourglass_bottom),
-                iconColor: Colors.indigo,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card( //ครอบ Card เพื่อสร้างกรอบขาวๆนูนๆลอยขึ้นมา
+            elevation: 4, //เพิ่มเงา
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15), //มุมกรอบให้โค้งมน
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0), //ระยะห่างในกรอบ
+              child: Column(
+                mainAxisSize: MainAxisSize.min, //ให้กรอบสูงพอดีกับเนื้อหา
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'คำนวณลิตรเป็นแกลลอน (US)',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "แกลลอน (US) = ${area.toStringAsFixed(2)}", //ทศนิยม 2 ตำแหน่ง
+                    style: const TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 15),
+                  TextField(
+                    controller: _literController,
+                    keyboardType: TextInputType.number, //คีย์บอร์ดขึ้นเป็นตัวเลข
+                    decoration: const InputDecoration(
+                      labelText: "ลิตร",
+                      icon: Icon(Icons.hourglass_bottom),
+                      iconColor: Colors.indigo,
+                      //ใส่กรอบสี่เหลี่ยมให้ช่องใส่เลขข้อมูล
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () => calculate(),
+                    child: const Text("คำนวณ"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
-            ElevatedButton(
-              onPressed: () => calculate(),
-              child: Text("คำนวณ"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
